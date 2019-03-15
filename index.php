@@ -1,10 +1,14 @@
 <?php
 
-var_dump('ok');
-die();
-/**
- * Created by PhpStorm.
- * User: bogdan
- * Date: 15.03.19
- * Time: 11:43
- */
+require_once ('bootstrap.php');
+require_once ('App/routes.php');
+require_once ('App/helpers.php');
+//bootstrap application
+try {
+    $controller = new \System\Request\BootController(new \System\Request\ControllerBootParam($appRoutes));
+    $controller->bootController();
+} catch (Exception $e) {
+    dd($e->getMessage());
+}
+
+
