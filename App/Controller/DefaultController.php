@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use System\Request\BootController;
 use System\View;
 
 class DefaultController {
@@ -10,6 +11,21 @@ class DefaultController {
     {
         $view = new View('test.php');
 
-        return $view->render(['test']);
+        return $view->render(['testData' => 'test']);
+    }
+
+    public function testAction()
+    {
+
+        dd("New Action Controller");
+        //$view = new View('test.php');
+
+        //return $view->render(['testData' => 'test']);
+    }
+
+    public function paramAction($param, \Config\DatabaseConnection $databaseConnection)
+    {
+
+        dd('Controller with PARAM ='.$param.'='.$databaseConnection->getTest());
     }
 }

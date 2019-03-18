@@ -33,13 +33,7 @@ class View{
      */
     public function render(Array $data) {
         extract($data);
-    //    dd(__DIR__);
-        
-       // dd( __DIR__ . DIRECTORY_SEPARATOR .'../view'. DIRECTORY_SEPARATOR. $this->template);
-        
-        
         ob_start();
-       // include( APP_PATH . DIRECTORY_SEPARATOR . $this->template);
         include ( __DIR__ . DIRECTORY_SEPARATOR .'../view'. DIRECTORY_SEPARATOR. $this->template);
         $content = ob_get_contents();
         ob_end_clean();

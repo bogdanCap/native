@@ -1,7 +1,9 @@
 <?php
 
 $appRoutes = [
-   '/' => 'Controller/DefaultController'  
+    '/' => 'Controller/DefaultController@indexAction',
+    '/@d' => 'Controller/DefaultController@paramAction',
+    '/firstUrlSegmentParam/secondUrlSegmentParam' => 'Controller/DefaultController@testAction'
 ];
 
 return $appRoutes;
