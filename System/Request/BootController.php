@@ -59,10 +59,32 @@ class   BootController {
         if(count($actionParam) == 0) {
 
             //need to add dynamic argument for action, as in the example below
+            $reflaction = new \ReflectionMethod($namespace, $action);
+            $params = $reflaction->getParameters();
+            $executeParameters = [];
+            $ii = 0;
 
-
+            foreach ($params as $param) {
+                //$param is an instance of ReflectionParameter
+                
+                if($param->getClass()) {
+                    $objectParam = $param->getClass();
+                    $objNamespace = $objectParam->getName();
+                    $executeParameters [] = new $objNamespace;
+                } else {
+                    $urlSegmentParam = array_values($actionParam);
+                    $executeParameters [] = $urlSegmentParam[$ii];
+                    $ii++;
+                }
+            }
+            //send param to controller
             $instance = new $namespace();
-            echo $instance->$action();
+            echo $instance->$action(...$executeParameters); //add dynamic param into action
+            
+            
+          
+            
+
         } else {
             //check arguments pass to object action
             $reflaction = new \ReflectionMethod($namespace, $action);
@@ -86,4 +108,6 @@ class   BootController {
             echo $instance->$action(...$executeParameters); //add dynamic param into action
         }
     }
+
+
 }
