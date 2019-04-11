@@ -10,14 +10,10 @@ class   BootController {
     
     public $requestParam;
 
-    private $bootInstance;
-
     public function __construct(RequestImplementation $requestImplementation)
     {
         $this->requestParam = $requestImplementation;
     }
-
-
 
     public function bootController()
     {
