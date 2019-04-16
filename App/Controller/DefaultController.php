@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Model\User;
 use App\Service\UserService;
 use System\Controller\BaseController;
 use System\Database\Database;
@@ -17,6 +18,10 @@ class DefaultController extends BaseController{
 
 
         //NEED TO CREATE NATIVE QUERY BUILDER
+
+        $user = new User();
+        $result = $user->select('*')->where('id = 1')->get();
+        dd($result);
 
 
 
