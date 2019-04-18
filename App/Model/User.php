@@ -6,7 +6,8 @@ use System\Database\Query\Model;
 
 class User extends Model {
     
-    private $table = 'user';
-    
-   
+    /**
+     * @var string
+     */
+    public $table = 'users';
 }

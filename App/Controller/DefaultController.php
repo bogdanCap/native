@@ -13,14 +13,11 @@ class DefaultController extends BaseController{
 
     public function indexAction()
     {
-       // $db = Database::getDb();
-      //  $mysqli = $db->getConnection();
-
-
-        //NEED TO CREATE NATIVE QUERY BUILDER
+      
 
         $user = new User();
         $result = $user->select('*')->where('id = 1')->get();
+        //$result = $user->select('*')->get();
         dd($result);
 
 
