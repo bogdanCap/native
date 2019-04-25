@@ -6,7 +6,7 @@ require_once ('App/helpers.php');
 //bootstrap application
 try {
     /** @var array $appRoutes from App/routes.php*/
-    $controller = new \System\Request\BootController(new \System\Request\ControllerBootParam($appRoutes));
+    $controller = new \System\Request\BootController(new \System\Request\ControllerBootParam());
     $controller->bootController();
 } catch (Exception $e) {
     dd($e->getMessage());

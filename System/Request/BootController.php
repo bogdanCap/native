@@ -2,36 +2,37 @@
 
 namespace System\Request;
 
-
-
 use App\Controller;
 
 class   BootController {
     
-    public $requestParam;
+    public $request;
 
     public function __construct(RequestImplementation $requestImplementation)
     {
-        $this->requestParam = $requestImplementation;
+        $this->request = $requestImplementation;
     }
 
     public function bootController()
     {
 
-
-
         $actionTask = '';
         $actionParam = [];
 
-        if (isset($this->requestParam->getRoutes()[$this->requestParam->getUrlSegments()])) {
-            $actionTask = $this->requestParam->getRoutes()[$this->requestParam->getUrlSegments()];
+        try {
+            $routes = $this->request->getRoutes()[strtolower($_SERVER['REQUEST_METHOD'])];
+        } catch (\Exception $e) {
+            throw new \Exception('Bogdan: no route registering for this http method!');
+        }
+
+        if (isset($routes[$this->request->getUrlSegments()])) {
+            $actionTask = $routes[$this->request->getUrlSegments()];
         } else {
             //if do nor find standard route and we need to find route with bind param
-            foreach ($this->requestParam->getRoutes() as $route => $classParam) {
-                $requestSegments = explode('/', $this->requestParam->getUrlSegments());
+            foreach ($routes as $route => $classParam) {
+                $requestSegments = explode('/', $this->request->getUrlSegments());
                 unset($requestSegments[0]);
                 if(strpos($route, '@d')) {
-                    //dd($route);
                     $registeringUrlSegments = explode('/', $route);
                     unset($registeringUrlSegments[0]);
                     if(count($registeringUrlSegments) == count($requestSegments)) {
@@ -53,7 +54,6 @@ class   BootController {
         $namespace = 'App\\'.str_replace('/', '\\', $class);
 
         if(count($actionParam) == 0) {
-
             //need to add dynamic argument for action, as in the example below
             $reflaction = new \ReflectionMethod($namespace, $action);
             $params = $reflaction->getParameters();
@@ -76,10 +76,6 @@ class   BootController {
             //send param to controller
             $instance = new $namespace();
             echo $instance->$action(...$executeParameters); //add dynamic param into action
-            
-            
-          
-            
 
         } else {
             //check arguments pass to object action
@@ -104,6 +100,4 @@ class   BootController {
             echo $instance->$action(...$executeParameters); //add dynamic param into action
         }
     }
-
-
 }
