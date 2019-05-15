@@ -12,10 +12,6 @@ class Model extends ModelBase {
      */
     public function __call($method, $parameters)
     {
-        ////if (in_array($method, ['increment', 'decrement'])) {
-        //    return $this->$method(...$parameters);
-       // }
-
         $parentClass = get_class($this);
         $model = new $parentClass;
         if(!property_exists($model, 'table')) {

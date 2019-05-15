@@ -4,32 +4,25 @@ namespace System\Request;
 
 use App\Controller;
 
-class  BootController {
-    
+class BootController extends RequestBase {
+
+    /**
+     * @var RequestImplementation
+     */
     public $request;
 
-    /** @var  string */
-    private $actionTask;
-
-    /** @var string[] */
-    private $actionParam = [];
-
+    /**
+     * BootController constructor.
+     * @param RequestImplementation $requestImplementation
+     */
     public function __construct(RequestImplementation $requestImplementation)
     {
         $this->request = $requestImplementation;
     }
 
-    public function bootController()
-    {
-        //pars request segment
-        $this->getRouteSegment();
-        if(!$this->actionTask){
-            throw new \Exception('Bogdan: no route found for this url!');
-        }
-        //execute controller content
-        $this->executeControllerContent();
-    }
-
+    /**
+     * @throws \Exception
+     */
     private function getRouteSegment()
     {
         try {
@@ -58,61 +51,14 @@ class  BootController {
         }
     }
 
-    /**
-     * @return mixed
-     */
-    private function executeControllerContent()
+    public function bootController()
     {
-        $action = substr($this->actionTask, strpos($this->actionTask, '@') + 1, strlen($this->actionTask));
-        $class = str_replace('@'.$action, "", $this->actionTask);
-        $namespace = 'App\\'.str_replace('/', '\\', $class);
-
-        if(count($this->actionParam) == 0) {
-            //need to add dynamic argument for action, as in the example below
-            $reflaction = new \ReflectionMethod($namespace, $action);
-            $params = $reflaction->getParameters();
-            $executeParameters = [];
-            $ii = 0;
-
-            foreach ($params as $param) {
-                //$param is an instance of ReflectionParameter
-
-                if($param->getClass()) {
-                    $objectParam = $param->getClass();
-                    $objNamespace = $objectParam->getName();
-                    $executeParameters [] = new $objNamespace;
-                } else {
-                    $urlSegmentParam = array_values($this->actionParam);
-                    $executeParameters [] = $urlSegmentParam[$ii];
-                    $ii++;
-                }
-            }
-            //send param to controller
-            $instance = new $namespace();
-
-            echo $instance->$action(...$executeParameters); //add dynamic param into action
-        } else {
-            //check arguments pass to object action
-            $reflaction = new \ReflectionMethod($namespace, $action);
-            $params = $reflaction->getParameters();
-            $executeParameters = [];
-            $ii = 0;
-            foreach ($params as $param) {
-                //$param is an instance of ReflectionParameter
-                if($param->getClass()) {
-                    $objectParam = $param->getClass();
-                    $objNamespace = $objectParam->getName();
-                    $executeParameters [] = new $objNamespace;
-                } else {
-                    $urlSegmentParam = array_values($this->actionParam);
-                    $executeParameters [] = $urlSegmentParam[$ii];
-                    $ii++;
-                }
-            }
-            //send param to controller
-            $instance = new $namespace();
-
-            echo $instance->$action(...$executeParameters); //add dynamic param into action
+        //pars request segment
+        $this->getRouteSegment();
+        if(!$this->actionTask){
+            throw new \Exception('Bogdan: no route found for this url!');
         }
+        //execute controller content
+        $this->executeControllerContent();
     }
 }
